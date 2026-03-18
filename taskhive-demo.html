@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="TaskHive — Smart Freelance Marketplace. Post tasks, hire talent, get paid securely."/>
+<title>TaskHive 🐝 — Freelance Marketplace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090f;--surface:#111118;--card:#181824;--border:#252535;
+  --accent:#f5c542;--accent2:#ff6b35;--accent3:#4ecdc4;
+  --text:#eeeef8;--muted:#6a6a8a;
+  --grad:linear-gradient(135deg,#f5c542,#ff6b35);
+  --grad3:linear-gradient(135deg,#4ecdc4,#2ab5ac);
+  --err:#ff5c5c;--ok:#4ecdc4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+::selection{background:rgba(245,197,66,.25)}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(9,9,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--text)}
+.logo-bee{font-size:1.1rem}
+.logo-grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-right{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--grad);color:#09090f;font-weight:700}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,197,66,.3)}
+.btn-sm{padding:6px 12px;font-size:.78rem}
+.nav-user{display:none;align-items:center;gap:10px}
+.nav-user.show{display:flex}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;color:#09090f;flex-shrink:0}
+.nav-name{font-size:.85rem;font-weight:600;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 20px 60px;text-align:center;position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.b1{width:400px;height:400px;background:rgba(245,197,66,.1);top:-100px;left:-120px;animation:f1 9s ease-in-out infinite}
+.b2{width:350px;height:350px;background:rgba(255,107,53,.08);bottom:-80px;right:-100px;animation:f2 11s ease-in-out infinite}
+.b3{width:200px;height:200px;background:rgba(78,205,196,.07);top:50%;left:60%;animation:f1 13s ease-in-out infinite reverse}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,30px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(-25px,-20px)}}
+.hero-inner{position:relative;z-index:2;max-width:600px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:100px;border:1px solid rgba(245,197,66,.25);background:rgba(245,197,66,.06);font-size:.76rem;font-weight:500;color:var(--accent);margin-bottom:24px}
+.hb-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.6)}}
+h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,8vw,4rem);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:18px}
+h1 .hl{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1rem;color:var(--muted);line-height:1.7;margin-bottom:32px;font-weight:300}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hero-btns .btn{padding:13px 28px;font-size:.95rem;border-radius:10px}
+.hero-btns .btn-outline{background:none;border:1.5px solid var(--border);color:var(--text)}
+.hero-btns .btn-outline:hover{border-color:var(--accent3);color:var(--accent3)}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:48px;flex-wrap:wrap}
+.hstat .num{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hstat .lbl{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+/* ── SECTIONS ── */
+.sec{padding:72px 20px}
+.sec-tag{font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;letter-spacing:-1px;line-height:1.15}
+.sec-title .hl{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sec-desc{color:var(--muted);font-size:.92rem;margin-top:10px;line-height:1.7;max-width:480px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.surface{background:var(--surface)}
+
+/* ── STEPS ── */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:40px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 18px;transition:all .25s}
+.step:hover{transform:translateY(-4px);border-color:rgba(245,197,66,.25)}
+.step-n{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.35;line-height:1;margin-bottom:14px}
+.step-icon{font-size:1.7rem;margin-bottom:10px}
+.step-t{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:7px}
+.step-d{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+/* ── CATEGORIES ── */
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:36px}
+.cat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .22s}
+.cat:hover,.cat:active{border-color:var(--accent3);transform:scale(1.02)}
+.cat-i{font-size:1.7rem;margin-bottom:8px}
+.cat-n{font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700}
+.cat-c{font-size:.7rem;color:var(--muted);margin-top:2px}
+
+/* ── TASK CARDS ── */
+.tasks-grid{display:grid;gap:14px;margin-top:24px}
+.task-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.task-card:active{border-color:rgba(245,197,66,.3)}
+.tc-top{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;align-items:flex-start}
+.tc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.94rem;line-height:1.3;flex:1}
+.tc-budget{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:.94rem;white-space:nowrap;flex-shrink:0}
+.tc-desc{font-size:.81rem;color:var(--muted);line-height:1.55;margin-bottom:12px}
+.tc-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.tc-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.badge-sm{padding:2px 8px;border-radius:100px;font-size:.68rem;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.tc-apply{padding:6px 14px;border-radius:7px;border:1px solid rgba(245,197,66,.28);background:rgba(245,197,66,.06);color:var(--accent);font-size:.76rem;font-weight:700;cursor:pointer;transition:all .18s}
+.tc-apply:active{background:rgba(245,197,66,.15)}
+
+/* ── PAYMENT SECTION ── */
+.pay-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.pay-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 14px;display:flex;align-items:center;gap:10px;transition:all .22s}
+.pay-card:active{border-color:rgba(245,197,66,.3)}
+.pay-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.pay-nm{font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700}
+.pay-dc{font-size:.7rem;color:var(--muted);margin-top:1px}
+.features{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+.feat{display:flex;gap:12px;align-items:flex-start}
+.feat-ico{width:32px;height:32px;border-radius:7px;background:rgba(245,197,66,.09);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.feat-t{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:2px}
+.feat-d{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+/* ── AI SECTION ── */
+.ai-wrap{background:linear-gradient(135deg,var(--card),rgba(78,205,196,.04));border:1px solid rgba(78,205,196,.15);border-radius:18px;padding:28px 20px;margin-top:36px}
+.ai-title{font-family:'Syne',sans-serif;font-size:1.45rem;font-weight:800;margin-bottom:10px}
+.ai-title .hl3{color:var(--accent3)}
+.ai-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.ai-tag{padding:4px 12px;border-radius:100px;font-size:.74rem;border:1px solid rgba(78,205,196,.2);color:var(--accent3);background:rgba(78,205,196,.06)}
+.chat-demo{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.chat-bar{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.chat-dot{width:6px;height:6px;border-radius:50%}
+.chat-dot.g{background:var(--accent3)}
+.chat-status{font-size:.72rem;color:var(--muted)}
+.bubble{padding:10px 13px;border-radius:10px;font-size:.82rem;line-height:1.5;max-width:90%}
+.bubble-u{background:rgba(245,197,66,.09);border:1px solid rgba(245,197,66,.13);align-self:flex-end;border-radius:10px 10px 2px 10px}
+.bubble-ai{background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.12);align-self:flex-start;border-radius:10px 10px 10px 2px}
+.bubble-ai .ai-nm{font-size:.66rem;color:var(--accent3);font-weight:700;margin-bottom:4px}
+
+/* ── FREELANCERS ── */
+.fl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:36px}
+.fl{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 14px;transition:all .22s}
+.fl:active{border-color:rgba(245,197,66,.2)}
+.fl-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:10px;border:2px solid var(--border)}
+.fl-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem}
+.fl-role{font-size:.74rem;color:var(--muted);margin:2px 0 7px}
+.fl-rate{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:.9rem}
+.fl-stars{font-size:.72rem;color:var(--accent);letter-spacing:.5px}
+.fl-rev{font-size:.7rem;color:var(--muted)}
+.skill-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px}
+.skill-tag{padding:2px 7px;border-radius:100px;font-size:.67rem;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+
+/* ── CTA ── */
+.cta-sec{padding:72px 20px;text-align:center;background:linear-gradient(135deg,rgba(245,197,66,.05),rgba(255,107,53,.03));border-top:1px solid var(--border)}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.cta-btns .btn{padding:14px 28px;font-size:.95rem;border-radius:10px}
+.cta-btns .btn-outline{background:none;border:1.5px solid var(--border);color:var(--text)}
+.cta-btns .btn-outline:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* ── FOOTER ── */
+footer{padding:28px 20px;border-top:1px solid var(--border);text-align:center}
+.foot-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:5px;justify-content:center;margin-bottom:16px}
+.foot-logo span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.foot-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.foot-links a{color:var(--muted);font-size:.8rem;text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:var(--text)}
+.foot-copy{font-size:.74rem;color:var(--muted)}
+
+/* ── MODALS ── */
+.overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);align-items:flex-end;justify-content:center;padding:0}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:28px 20px 40px;width:100%;max-width:480px;position:relative;animation:slideUp .28s ease both;max-height:90vh;overflow-y:auto}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 20px}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;padding:4px}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:4px}
+.modal-sub{font-size:.84rem;color:var(--muted);margin-bottom:22px}
+.modal-tabs{display:flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:20px}
+.mtab{flex:1;padding:9px;text-align:center;font-size:.84rem;font-weight:600;cursor:pointer;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s}
+.mtab.active{background:var(--grad);color:#09090f}
+.form-g{margin-bottom:14px}
+.form-l{display:block;font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.form-i,.form-ta,.form-sel{width:100%;padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.form-i:focus,.form-ta:focus,.form-sel:focus{border-color:var(--accent)}
+.form-ta{resize:vertical;min-height:88px}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-sub{width:100%;padding:13px;border:none;border-radius:9px;background:var(--grad);color:#09090f;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s}
+.form-sub:active{transform:scale(.98)}
+.form-sub:disabled{opacity:.55;cursor:not-allowed}
+.form-sw{text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px}
+.form-sw a{color:var(--accent);cursor:pointer;font-weight:600}
+.alert{padding:10px 13px;border-radius:8px;font-size:.82rem;margin-bottom:14px;display:none}
+.alert.show{display:block}
+.alert-e{background:rgba(255,92,92,.09);border:1px solid rgba(255,92,92,.28);color:#ff8a8a}
+.alert-ok{background:rgba(78,205,196,.09);border:1px solid rgba(78,205,196,.28);color:var(--accent3)}
+.role-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:4px}
+.role-btn{flex:1;padding:9px;text-align:center;font-size:.84rem;font-weight:600;cursor:pointer;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s}
+.role-btn.active{background:var(--grad);color:#09090f}
+.spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:#09090f;border-radius:50%;animation:sp .6s linear infinite;display:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── DASHBOARD ── */
+.dash{display:none;position:fixed;inset:0;z-index:800;background:var(--bg);flex-direction:column;overflow:hidden}
+.dash.open{display:flex}
+.dash-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(9,9,15,.95);flex-shrink:0}
+.dash-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:5px}
+.dash-logo span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dash-body{flex:1;overflow-y:auto;padding:20px 18px 100px}
+.dash-tabs{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--border);flex-shrink:0;scrollbar-width:none}
+.dash-tabs::-webkit-scrollbar{display:none}
+.dtab{padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.dtab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.dash-panel{display:none}
+.dash-panel.active{display:block}
+.dash-h1{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px}
+.dash-h1 span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dash-sub{font-size:.84rem;color:var(--muted);margin-bottom:22px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.stat-c{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 14px;position:relative;overflow:hidden}
+.stat-c::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.stat-n{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:.74rem;color:var(--muted);margin-top:3px}
+.tl{display:flex;flex-direction:column;gap:10px}
+.tli{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tli-info{flex:1;min-width:0}
+.tli-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tli-meta{font-size:.73rem;color:var(--muted);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.tli-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex-shrink:0}
+.sp-open{padding:3px 8px;border-radius:100px;font-size:.68rem;font-weight:600;background:rgba(78,205,196,.09);color:var(--accent3);border:1px solid rgba(78,205,196,.18)}
+.sp-ip{padding:3px 8px;border-radius:100px;font-size:.68px;font-weight:600;background:rgba(245,197,66,.09);color:var(--accent);border:1px solid rgba(245,197,66,.18);font-size:.68rem}
+.sp-done{padding:3px 8px;border-radius:100px;font-size:.68rem;font-weight:600;background:rgba(100,210,100,.09);color:#7ddb7d;border:1px solid rgba(100,210,100,.18)}
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-i{font-size:2.4rem;margin-bottom:10px}
+.empty-t{font-size:.88rem;margin-bottom:16px}
+
+/* AI CHAT */
+.ai-chat{display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:300px;background:var(--card);border:1px solid rgba(78,205,196,.15);border-radius:14px;overflow:hidden;margin-top:16px}
+.ai-chat-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(78,205,196,.05)}
+.ai-av{width:32px;height:32px;border-radius:50%;background:rgba(78,205,196,.13);border:1px solid rgba(78,205,196,.25);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.ai-chat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem}
+.ai-chat-status{font-size:.68rem;color:var(--accent3)}
+.ai-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.ai-input-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ai-input{flex:1;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none}
+.ai-input:focus{border-color:var(--accent3)}
+.ai-send{padding:10px 16px;background:var(--grad3);border:none;border-radius:8px;color:#09090f;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.ai-think{display:flex;gap:3px;align-items:center;padding:10px 13px;background:rgba(78,205,196,.06);border:1px solid rgba(78,205,196,.11);border-radius:10px 10px 10px 2px;max-width:60px}
+.ai-d{width:5px;height:5px;border-radius:50%;background:var(--accent3);animation:ad .8s infinite}
+.ai-d:nth-child(2){animation-delay:.14s}
+.ai-d:nth-child(3){animation-delay:.28s}
+@keyframes ad{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* PROPOSALS */
+.prop-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;max-height:50vh;overflow-y:auto}
+.prop{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
+.prop-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;flex-wrap:wrap;gap:6px}
+.prop-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem}
+.prop-bid{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:.92rem}
+.prop-msg{font-size:.81rem;color:var(--muted);line-height:1.55;margin-bottom:10px}
+.prop-accept{padding:7px 14px;border-radius:7px;background:var(--grad);border:none;color:#09090f;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* STATUS TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);z-index:2000;padding:10px 18px;border-radius:10px;font-size:.82rem;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;max-width:calc(100vw - 40px);text-align:center;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:rgba(78,205,196,.15);border:1px solid rgba(78,205,196,.3);color:var(--accent3)}
+.toast.err{background:rgba(255,92,92,.15);border:1px solid rgba(255,92,92,.3);color:#ff8a8a}
+.toast.info{background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.25);color:var(--accent)}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.reveal.vis{opacity:1;transform:none}
+
+/* FLOATING ACTION BUTTON */
+.fab{position:fixed;bottom:24px;right:20px;z-index:700;width:54px;height:54px;border-radius:50%;background:var(--grad);border:none;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;box-shadow:0 6px 24px rgba(245,197,66,.4);transition:transform .2s;display:none}
+.fab.show{display:flex}
+.fab:active{transform:scale(.92)}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#"><span class="logo-bee">🐝</span>Task<span class="logo-grad">Hive</span></a>
+  <div class="nav-right" id="navOut">
+    <button class="btn btn-ghost btn-sm" onclick="openModal('auth','login')">Log In</button>
+    <button class="btn btn-primary btn-sm" onclick="openModal('auth','reg')">Join Free</button>
+  </div>
+  <div class="nav-user" id="navIn">
+    <div class="nav-av" id="navAv">A</div>
+    <span class="nav-name" id="navNm"></span>
+    <button class="btn btn-ghost btn-sm" onclick="openDash()">Dashboard</button>
+  </div>
+</nav>
+
+<!-- FAB (floating post task button) -->
+<button class="fab" id="fab" onclick="postTask()">+</button>
+
+<!-- ══ AUTH MODAL ══ -->
+<div class="overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal('authModal')">×</button>
+    <div class="modal-title">Welcome to TaskHive 🐝</div>
+    <div class="modal-sub">Join thousands of clients and freelancers.</div>
+    <div class="modal-tabs">
+      <button class="mtab active" id="t-login" onclick="switchTab('login')">Log In</button>
+      <button class="mtab" id="t-reg" onclick="switchTab('reg')">Sign Up</button>
+    </div>
+    <div class="alert alert-e" id="authErr"></div>
+    <div class="alert alert-ok" id="authOk"></div>
+    <!-- Login -->
+    <div id="loginForm">
+      <div class="form-g"><label class="form-l">Email</label><input class="form-i" type="email" id="lEmail" placeholder="you@gmail.com" inputmode="email"/></div>
+      <div class="form-g"><label class="form-l">Password</label><input class="form-i" type="password" id="lPass" placeholder="Your password"/></div>
+      <button class="form-sub" id="loginBtn" onclick="doLogin()"><span class="spin" id="lSpin"></span><span id="lTxt">Log In →</span></button>
+      <div class="form-sw">No account? <a onclick="switchTab('reg')">Sign up free</a></div>
+    </div>
+    <!-- Register -->
+    <div id="regForm" style="display:none">
+      <div class="form-g"><label class="form-l">Your Name</label><input class="form-i" type="text" id="rName" placeholder="Full name"/></div>
+      <div class="form-g"><label class="form-l">Email</label><input class="form-i" type="email" id="rEmail" placeholder="you@gmail.com" inputmode="email"/></div>
+      <div class="form-g"><label class="form-l">Password</label><input class="form-i" type="password" id="rPass" placeholder="Min 6 characters"/></div>
+      <div class="form-g">
+        <label class="form-l">I want to…</label>
+        <div class="role-toggle">
+          <button class="role-btn active" id="rc" onclick="setRole('client')">🏢 Hire Talent</button>
+          <button class="role-btn" id="rf" onclick="setRole('freelancer')">🧑‍💻 Find Work</button>
+        </div>
+      </div>
+      <button class="form-sub" id="regBtn" onclick="doReg()"><span class="spin" id="rSpin"></span><span id="rTxt">Create Account →</span></button>
+      <div class="form-sw">Have account? <a onclick="switchTab('login')">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POST TASK MODAL ══ -->
+<div class="overlay" id="taskModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal('taskModal')">×</button>
+    <div class="modal-title">Post a Task</div>
+    <div class="modal-sub">Describe your task. Proposals arrive fast.</div>
+    <div class="alert alert-e" id="taskErr"></div>
+    <div class="alert alert-ok" id="taskOk"></div>
+    <div class="form-g"><label class="form-l">Task Title</label><input class="form-i" type="text" id="tTitle" placeholder="e.g. Design a logo for my startup"/></div>
+    <div class="form-g"><label class="form-l">Description</label><textarea class="form-ta" id="tDesc" placeholder="What exactly do you need? Include requirements and deadline…"></textarea></div>
+    <div class="form-2">
+      <div class="form-g"><label class="form-l">Budget ($)</label><input class="form-i" type="number" id="tBudget" placeholder="e.g. 150" inputmode="numeric"/></div>
+      <div class="form-g"><label class="form-l">Category</label>
+        <select class="form-sel form-i" id="tCat">
+          <option value="">Select…</option>
+          <option>Data Entry</option><option>Design</option><option>Development</option>
+          <option>Writing</option><option>Research</option><option>Social Media</option>
+          <option>Video Editing</option><option>Accounting</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+    <button class="form-sub" id="postBtn" onclick="doPost()"><span class="spin" id="pSpin"></span><span id="pTxt">Post Task →</span></button>
+  </div>
+</div>
+
+<!-- ══ APPLY MODAL ══ -->
+<div class="overlay" id="applyModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal('applyModal')">×</button>
+    <div class="modal-title" id="applyTitle">Apply for Task</div>
+    <div class="modal-sub" id="applySub">Write a message and set your bid.</div>
+    <div class="alert alert-e" id="applyErr"></div>
+    <div class="alert alert-ok" id="applyOk"></div>
+    <div class="form-g"><label class="form-l">Cover Message</label><textarea class="form-ta" id="applyMsg" placeholder="Why are you the best person for this task?"></textarea></div>
+    <div class="form-g"><label class="form-l">Your Bid ($)</label><input class="form-i" type="number" id="applyBid" inputmode="numeric"/></div>
+    <button class="form-sub" id="applyBtn" onclick="doApply()"><span class="spin" id="aSpin"></span><span id="aTxt">Submit Proposal →</span></button>
+  </div>
+</div>
+
+<!-- ══ TASK DETAIL MODAL ══ -->
+<div class="overlay" id="detailModal">
+  <div class="modal" style="max-height:85vh">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal('detailModal')">×</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="dash" id="dash">
+  <div class="dash-top">
+    <div class="dash-logo">🐝 Task<span>Hive</span></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary btn-sm" onclick="postTask()">+ Post</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeDash()">✕ Close</button>
+    </div>
+  </div>
+  <div class="dash-tabs" id="dashTabs"></div>
+  <div class="dash-body" id="dashBody"></div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="hb-dot"></span>Smart Freelance Marketplace — Live Now</div>
+    <h1>Where Work Gets Done <span class="hl">Brilliantly.</span></h1>
+    <p class="hero-sub">Post tasks, receive proposals, and hire skilled freelancers in minutes. Fast, secure, AI-powered.</p>
+    <div class="hero-btns">
+      <button class="btn btn-primary" onclick="postTask()">Post a Task →</button>
+      <button class="btn btn-outline" onclick="scrollTo2('live-tasks')">Browse Tasks</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="num">12K+</div><div class="lbl">Freelancers</div></div>
+      <div class="hstat"><div class="num" id="statTasks">0</div><div class="lbl">Tasks Posted</div></div>
+      <div class="hstat"><div class="num">98%</div><div class="lbl">Satisfaction</div></div>
+      <div class="hstat"><div class="num">24/7</div><div class="lbl">AI Support</div></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="sec surface reveal" id="how">
+  <div class="sec-tag">Process</div>
+  <div class="sec-title">Done in <span class="hl">3 simple steps</span></div>
+  <div class="steps">
+    <div class="step"><div class="step-n">01</div><div class="step-icon">📝</div><div class="step-t">Post Your Task</div><div class="step-d">Describe what you need and set your budget. Goes live instantly.</div></div>
+    <div class="step"><div class="step-n">02</div><div class="step-icon">🤝</div><div class="step-t">Get Proposals</div><div class="step-d">Skilled freelancers apply. Review profiles and bids.</div></div>
+    <div class="step"><div class="step-n">03</div><div class="step-icon">✅</div><div class="step-t">Pay Securely</div><div class="step-d">Hire the best person. Pay only when satisfied.</div></div>
+    <div class="step"><div class="step-n">04</div><div class="step-icon">⭐</div><div class="step-t">Rate &amp; Review</div><div class="step-d">Leave feedback. Build trust with every task.</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- CATEGORIES -->
+<section class="sec reveal" id="categories">
+  <div class="sec-tag">Explore</div>
+  <div class="sec-title">Every task, <span class="hl">one place</span></div>
+  <div class="cats">
+    <div class="cat" onclick="filterCat('Data Entry')"><div class="cat-i">⌨️</div><div class="cat-n">Data Entry</div><div class="cat-c">2,400+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Design')"><div class="cat-i">🎨</div><div class="cat-n">Design</div><div class="cat-c">1,800+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Development')"><div class="cat-i">💻</div><div class="cat-n">Development</div><div class="cat-c">3,100+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Writing')"><div class="cat-i">✍️</div><div class="cat-n">Writing</div><div class="cat-c">1,500+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Research')"><div class="cat-i">📊</div><div class="cat-n">Research</div><div class="cat-c">900+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Social Media')"><div class="cat-i">📱</div><div class="cat-n">Social Media</div><div class="cat-c">1,200+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Video Editing')"><div class="cat-i">🎬</div><div class="cat-n">Video Editing</div><div class="cat-c">700+ tasks</div></div>
+    <div class="cat" onclick="filterCat('Accounting')"><div class="cat-i">🔢</div><div class="cat-n">Accounting</div><div class="cat-c">560+ tasks</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- LIVE TASKS -->
+<section class="sec surface reveal" id="live-tasks">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:10px;flex-wrap:wrap">
+    <div>
+      <div class="sec-tag">Live Board</div>
+      <div class="sec-title">Open <span class="hl">Tasks</span></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;padding-top:4px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="renderTasks()">↻ Refresh</button>
+      <button class="btn btn-primary btn-sm" onclick="postTask()">+ Post</button>
+    </div>
+  </div>
+  <div class="tasks-grid" id="tasksBox"></div>
+</section>
+<div class="divider"></div>
+
+<!-- PAYMENTS -->
+<section class="sec reveal" id="payments">
+  <div class="sec-tag">Secure Payments</div>
+  <div class="sec-title">Pay &amp; get paid <span class="hl">safely</span></div>
+  <div class="sec-desc">Escrow protects both sides — funds release only when work is approved.</div>
+  <div class="pay-cards">
+    <div class="pay-card"><div class="pay-ico" style="background:rgba(0,112,243,.1)">💳</div><div><div class="pay-nm">Card</div><div class="pay-dc">Debit/Credit</div></div></div>
+    <div class="pay-card"><div class="pay-ico" style="background:rgba(0,114,181,.1)">🅿️</div><div><div class="pay-nm">PayPal</div><div class="pay-dc">Worldwide</div></div></div>
+    <div class="pay-card"><div class="pay-ico" style="background:rgba(78,205,196,.1)">⚡</div><div><div class="pay-nm">Razorpay</div><div class="pay-dc">India / UPI</div></div></div>
+    <div class="pay-card"><div class="pay-ico" style="background:rgba(245,197,66,.1)">👛</div><div><div class="pay-nm">Wallet</div><div class="pay-dc">In-platform</div></div></div>
+  </div>
+  <div class="features">
+    <div class="feat"><div class="feat-ico">🔒</div><div><div class="feat-t">Escrow Protection</div><div class="feat-d">Funds held until work is approved by you.</div></div></div>
+    <div class="feat"><div class="feat-ico">⚡</div><div><div class="feat-t">Instant Withdrawals</div><div class="feat-d">Freelancers withdraw earnings immediately after approval.</div></div></div>
+    <div class="feat"><div class="feat-ico">🌍</div><div><div class="feat-t">Global Payments</div><div class="feat-d">Multi-currency — work with anyone anywhere.</div></div></div>
+    <div class="feat"><div class="feat-ico">📑</div><div><div class="feat-t">Auto Invoicing</div><div class="feat-d">Every transaction generates a professional invoice.</div></div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- AI SUPPORT -->
+<section class="sec surface reveal">
+  <div class="sec-tag">24/7 Support</div>
+  <div class="sec-title">AI Help, <span class="hl">Always On</span></div>
+  <div class="sec-desc">Instant answers — no queues, no business hours.</div>
+  <div class="ai-wrap">
+    <div class="ai-title">Smart Support <span class="hl3">Built In</span></div>
+    <div class="ai-desc" style="color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:16px">Ask anything about tasks, payments, disputes, or how the platform works. Our AI answers instantly.</div>
+    <div class="ai-tags"><span class="ai-tag">⚡ Instant</span><span class="ai-tag">🌐 Multilingual</span><span class="ai-tag">🕐 24/7</span><span class="ai-tag">🔄 Disputes</span></div>
+    <div class="chat-demo">
+      <div class="chat-bar"><div class="chat-dot g"></div><div class="chat-status">AI Support · Online</div></div>
+      <div class="bubble bubble-u">My payment didn't go through!</div>
+      <div class="bubble bubble-ai"><div class="ai-nm">🤖 TaskHive AI</div>No worries! Check your card details in Settings → Billing. I can also initiate a manual review instantly.</div>
+      <div class="bubble bubble-u">How does escrow work?</div>
+      <div class="bubble bubble-ai"><div class="ai-nm">🤖 TaskHive AI</div>Escrow holds your money safely until you approve the work. No one gets paid until you're happy! 🔒</div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:18px;width:100%;" onclick="openDash('ai')">Try AI Support →</button>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- FREELANCERS -->
+<section class="sec reveal" id="freelancers">
+  <div class="sec-tag">Top Talent</div>
+  <div class="sec-title">Meet our <span class="hl">top freelancers</span></div>
+  <div class="fl-grid">
+    <div class="fl"><div class="fl-av" style="background:rgba(245,197,66,.1)">👩‍🎨</div><div class="fl-name">Sofia R.</div><div class="fl-role">UI/UX Designer</div><div class="fl-rate">$28/hr</div><div class="fl-stars">★★★★★</div><div class="fl-rev">4.9 (142)</div><div class="skill-tags"><span class="skill-tag">Figma</span><span class="skill-tag">Brand</span></div></div>
+    <div class="fl"><div class="fl-av" style="background:rgba(78,205,196,.1)">👨‍💻</div><div class="fl-name">Arjun M.</div><div class="fl-role">Full-Stack Dev</div><div class="fl-rate">$45/hr</div><div class="fl-stars">★★★★★</div><div class="fl-rev">4.8 (98)</div><div class="skill-tags"><span class="skill-tag">React</span><span class="skill-tag">Node</span></div></div>
+    <div class="fl"><div class="fl-av" style="background:rgba(255,107,53,.1)">✍️</div><div class="fl-name">Layla K.</div><div class="fl-role">Content Writer</div><div class="fl-rate">$18/hr</div><div class="fl-stars">★★★★★</div><div class="fl-rev">5.0 (211)</div><div class="skill-tags"><span class="skill-tag">SEO</span><span class="skill-tag">Copy</span></div></div>
+    <div class="fl"><div class="fl-av" style="background:rgba(150,120,255,.1)">📊</div><div class="fl-name">David T.</div><div class="fl-role">Data Analyst</div><div class="fl-rate">$35/hr</div><div class="fl-stars">★★★★☆</div><div class="fl-rev">4.7 (77)</div><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">Excel</span></div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- CTA -->
+<section class="cta-sec reveal">
+  <div class="sec-tag" style="text-align:center">Get Started</div>
+  <div class="sec-title" style="text-align:center;max-width:100%">Ready to get tasks <span class="hl">done faster?</span></div>
+  <div class="sec-desc" style="text-align:center;margin:10px auto 0">Join thousands of clients and freelancers.</div>
+  <div class="cta-btns">
+    <button class="btn btn-primary" onclick="postTask()">Post a Task — It's Free</button>
+    <button class="btn btn-outline" onclick="openModal('auth','reg')">Join as Freelancer</button>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">🐝 Task<span>Hive</span></div>
+  <div class="foot-links"><a href="#">About</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a></div>
+  <div class="foot-copy">© 2026 TaskHive. All rights reserved.</div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  STATE — all data lives in localStorage so it persists
+// ══════════════════════════════════════════════════════════════
+const DB = {
+  get users()   { return JSON.parse(localStorage.getItem('th_users')  || '[]'); },
+  get tasks()   { return JSON.parse(localStorage.getItem('th_tasks')  || '[]'); },
+  get session() { return JSON.parse(localStorage.getItem('th_sess')   || 'null'); },
+  set users(v)  { localStorage.setItem('th_users',  JSON.stringify(v)); },
+  set tasks(v)  { localStorage.setItem('th_tasks',  JSON.stringify(v)); },
+  set session(v){ localStorage.setItem('th_sess',   JSON.stringify(v)); },
+};
+
+// Seed demo tasks if first visit
+(function seed(){
+  if(DB.tasks.length) return;
+  const demos = [
+    {id:uid(),title:'Design a logo for my tech startup',description:'Need a modern, minimalist logo. Should convey innovation and trust. Deliver PNG, SVG, and AI files.',budget:150,category:'Design',userId:'demo',clientName:'Alex K.',status:'open',proposals:[],createdAt:new Date(Date.now()-3600000).toISOString()},
+    {id:uid(),title:'Build a simple landing page in React',description:'One-page website for a SaaS product. Mobile responsive, clean design, contact form. Provide source code.',budget:300,category:'Development',userId:'demo',clientName:'Priya M.',status:'open',proposals:[],createdAt:new Date(Date.now()-7200000).toISOString()},
+    {id:uid(),title:'Write 5 SEO blog posts about travel',description:'Each post 800-1000 words, keyword-optimised, engaging tone. Topics provided. Native English preferred.',budget:80,category:'Writing',userId:'demo',clientName:'James T.',status:'open',proposals:[{freelancerId:'demo2',freelancerName:'Layla K.',message:'I have 3 years writing travel content.',bid:75,status:'pending',createdAt:new Date().toISOString()}],createdAt:new Date(Date.now()-1800000).toISOString()},
+    {id:uid(),title:'Data entry for 500 product listings',description:'Copy product info from PDF catalogue into Google Sheet. Name, price, description, category, SKU.',budget:60,category:'Data Entry',userId:'demo',clientName:'Ravi S.',status:'open',proposals:[],createdAt:new Date(Date.now()-900000).toISOString()},
+    {id:uid(),title:'Edit 10-minute YouTube video',description:'Add transitions, colour grade, add captions, background music from provided library. Return MP4 1080p.',budget:120,category:'Video Editing',userId:'demo',clientName:'Sofia B.',status:'open',proposals:[],createdAt:new Date(Date.now()-5400000).toISOString()},
+    {id:uid(),title:'Create Instagram content for a month',description:'30 posts: graphics + captions. Beauty niche. Brand guidelines provided. Schedule using Buffer.',budget:200,category:'Social Media',userId:'demo',clientName:'Meera J.',status:'open',proposals:[],createdAt:new Date(Date.now()-10800000).toISOString()},
+  ];
+  DB.tasks = demos;
+})();
+
+let currentUser = DB.session;
+let applyTaskId = null;
+let dashTab = 'overview';
+let aiHistory = [];
+let selectedRole = 'client';
+
+// ══════════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════════
+function uid(){ return '_'+Math.random().toString(36).slice(2,11); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ago(d){
+  const s=Math.floor((Date.now()-new Date(d))/1000);
+  if(s<60) return 'just now';
+  if(s<3600) return Math.floor(s/60)+'m ago';
+  if(s<86400) return Math.floor(s/3600)+'h ago';
+  return Math.floor(s/86400)+'d ago';
+}
+function scrollTo2(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+
+function toast(msg, type='info', ms=3200){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show '+type;
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),ms);
+}
+function showAlert(id,msg){ const e=document.getElementById(id); if(e){e.textContent=msg;e.classList.add('show');} }
+function clearAlerts(...ids){ ids.forEach(id=>{const e=document.getElementById(id);if(e){e.textContent='';e.classList.remove('show');}});}
+function busy(btn,sp,tx,on,lbl){
+  const b=document.getElementById(btn);
+  if(!b) return;
+  b.disabled=on;
+  const s=document.getElementById(sp); if(s) s.style.display=on?'block':'none';
+  const t=document.getElementById(tx); if(t) t.textContent=on?'Please wait…':lbl;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MODALS
+// ══════════════════════════════════════════════════════════════
+function openModal(type, tab='login'){
+  if(type==='auth'){
+    clearAlerts('authErr','authOk');
+    switchTab(tab);
+    document.getElementById('authModal').classList.add('open');
+  } else if(type==='task'){
+    if(!currentUser){ openModal('auth','reg'); toast('Create a free account to post a task','info'); return; }
+    clearAlerts('taskErr','taskOk');
+    document.getElementById('taskModal').classList.add('open');
+  } else if(type==='apply'){
+    document.getElementById('applyModal').classList.add('open');
+  }
+}
+function closeModal(id){ document.getElementById(id)?.classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+
+// ══════════════════════════════════════════════════════════════
+//  AUTH (stored in localStorage — no server needed)
+// ══════════════════════════════════════════════════════════════
+function switchTab(t){
+  clearAlerts('authErr','authOk');
+  document.getElementById('loginForm').style.display=t==='login'?'block':'none';
+  document.getElementById('regForm').style.display=t==='reg'?'block':'none';
+  document.getElementById('t-login').className='mtab'+(t==='login'?' active':'');
+  document.getElementById('t-reg').className='mtab'+(t==='reg'?' active':'');
+}
+function setRole(r){
+  selectedRole=r;
+  document.getElementById('rc').className='role-btn'+(r==='client'?' active':'');
+  document.getElementById('rf').className='role-btn'+(r==='freelancer'?' active':'');
+}
+
+function doLogin(){
+  clearAlerts('authErr','authOk');
+  const email=document.getElementById('lEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('lPass').value;
+  if(!email||!pass){ showAlert('authErr','Please fill in all fields.'); return; }
+  busy('loginBtn','lSpin','lTxt',true,'Log In →');
+  setTimeout(()=>{
+    const users=DB.users;
+    const user=users.find(u=>u.email===email&&u.password===btoa(pass));
+    if(!user){ showAlert('authErr','Wrong email or password.'); busy('loginBtn','lSpin','lTxt',false,'Log In →'); return; }
+    currentUser=user; DB.session=user;
+    showAlert('authOk','✓ Logged in!');
+    setTimeout(()=>{ closeModal('authModal'); updateNav(); toast('Welcome back, '+user.name.split(' ')[0]+'! 👋','ok'); },700);
+    busy('loginBtn','lSpin','lTxt',false,'Log In →');
+  },600);
+}
+
+function doReg(){
+  clearAlerts('authErr','authOk');
+  const name=document.getElementById('rName').value.trim();
+  const email=document.getElementById('rEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('rPass').value;
+  if(!name||!email||!pass){ showAlert('authErr','Please fill in all fields.'); return; }
+  if(pass.length<6){ showAlert('authErr','Password must be at least 6 characters.'); return; }
+  if(!/\S+@\S+\.\S+/.test(email)){ showAlert('authErr','Please enter a valid email.'); return; }
+  busy('regBtn','rSpin','rTxt',true,'Create Account →');
+  setTimeout(()=>{
+    const users=DB.users;
+    if(users.find(u=>u.email===email)){ showAlert('authErr','That email is already registered.'); busy('regBtn','rSpin','rTxt',false,'Create Account →'); return; }
+    const user={id:uid(),name,email,password:btoa(pass),role:selectedRole,walletBalance:0,totalEarned:0,createdAt:new Date().toISOString()};
+    DB.users=[...users,user];
+    currentUser=user; DB.session=user;
+    showAlert('authOk','✓ Account created! Welcome 🎉');
+    setTimeout(()=>{ closeModal('authModal'); updateNav(); toast('Welcome to TaskHive, '+name.split(' ')[0]+'! 🎉','ok'); },800);
+    busy('regBtn','rSpin','rTxt',false,'Create Account →');
+  },700);
+}
+
+function logout(){
+  currentUser=null; DB.session=null;
+  updateNav(); closeDash();
+  toast('Logged out. See you soon!','info');
+}
+
+function updateNav(){
+  const out=document.getElementById('navOut');
+  const inn=document.getElementById('navIn');
+  const fab=document.getElementById('fab');
+  if(currentUser){
+    out.style.display='none'; inn.classList.add('show');
+    document.getElementById('navAv').textContent=(currentUser.name||'U')[0].toUpperCase();
+    document.getElementById('navNm').textContent=currentUser.name?.split(' ')[0]||'User';
+    fab.classList.add('show');
+  } else {
+    out.style.display='flex'; inn.classList.remove('show');
+    fab.classList.remove('show');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TASKS
+// ══════════════════════════════════════════════════════════════
+function renderTasks(filterCat=''){
+  const tasks=DB.tasks.filter(t=>t.status==='open'&&(!filterCat||t.category===filterCat));
+  const box=document.getElementById('tasksBox');
+  if(!tasks.length){
+    box.innerHTML=`<div class="empty"><div class="empty-i">🔍</div><div class="empty-t">${filterCat?'No '+filterCat+' tasks right now.':'No tasks yet.'}</div><button class="btn btn-primary btn-sm" onclick="postTask()">Post the First Task</button></div>`;
+    return;
+  }
+  box.innerHTML=tasks.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(t=>`
+    <div class="task-card">
+      <div class="tc-top">
+        <div class="tc-title">${esc(t.title)}</div>
+        <div class="tc-budget">$${t.budget}</div>
+      </div>
+      <div class="tc-desc">${esc(t.description.slice(0,100))}${t.description.length>100?'…':''}</div>
+      <div class="tc-foot">
+        <div class="tc-meta">
+          <span class="badge-sm">${esc(t.category)}</span>
+          <span class="badge-sm">${ago(t.createdAt)}</span>
+          ${t.proposals?.length?`<span class="badge-sm">💬 ${t.proposals.length}</span>`:''}
+        </div>
+        <button class="tc-apply" onclick="openApply('${t.id}','${esc(t.title)}',${t.budget})">Apply →</button>
+      </div>
+    </div>`).join('');
+  // Update stat counter
+  document.getElementById('statTasks').textContent=DB.tasks.length+'+';
+}
+
+function filterCat(cat){
+  scrollTo2('live-tasks');
+  setTimeout(()=>renderTasks(cat),300);
+}
+
+function postTask(){
+  if(!currentUser){ openModal('auth','reg'); return; }
+  openModal('task');
+}
+
+function doPost(){
+  clearAlerts('taskErr','taskOk');
+  const title=document.getElementById('tTitle').value.trim();
+  const desc=document.getElementById('tDesc').value.trim();
+  const budget=document.getElementById('tBudget').value;
+  const cat=document.getElementById('tCat').value;
+  if(!title||!desc||!budget||!cat){ showAlert('taskErr','Please fill in all fields.'); return; }
+  if(Number(budget)<1){ showAlert('taskErr','Budget must be at least $1.'); return; }
+  busy('postBtn','pSpin','pTxt',true,'Post Task →');
+  setTimeout(()=>{
+    const task={id:uid(),title,description:desc,budget:Number(budget),category:cat,userId:currentUser.id,clientName:currentUser.name,status:'open',proposals:[],createdAt:new Date().toISOString()};
+    DB.tasks=[...DB.tasks,task];
+    showAlert('taskOk','✓ Task posted! Proposals incoming soon…');
+    ['tTitle','tDesc','tBudget'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('tCat').value='';
+    renderTasks();
+    setTimeout(()=>{ closeModal('taskModal'); toast('Task posted! 🚀','ok'); },1000);
+    busy('postBtn','pSpin','pTxt',false,'Post Task →');
+  },700);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  APPLY
+// ══════════════════════════════════════════════════════════════
+function openApply(taskId, title, budget){
+  if(!currentUser){ openModal('auth','login'); toast('Log in to apply for tasks','info'); return; }
+  if(currentUser.role==='client'){ toast('Switch to a Freelancer account to apply','info'); return; }
+  const task=DB.tasks.find(t=>t.id===taskId);
+  if(task?.userId===currentUser.id){ toast('You cannot apply to your own task','info'); return; }
+  if(task?.proposals?.some(p=>p.freelancerId===currentUser.id)){ toast('You already applied to this task','info'); return; }
+  applyTaskId=taskId;
+  document.getElementById('applyTitle').textContent='Apply: '+title;
+  document.getElementById('applySub').textContent='Client budget: $'+budget+' — write a strong proposal.';
+  document.getElementById('applyBid').value=budget;
+  document.getElementById('applyMsg').value='';
+  clearAlerts('applyErr','applyOk');
+  openModal('apply');
+}
+
+function doApply(){
+  clearAlerts('applyErr','applyOk');
+  const msg=document.getElementById('applyMsg').value.trim();
+  const bid=document.getElementById('applyBid').value;
+  if(!msg){ showAlert('applyErr','Please write a cover message.'); return; }
+  if(!bid||Number(bid)<1){ showAlert('applyErr','Please enter a valid bid.'); return; }
+  busy('applyBtn','aSpin','aTxt',true,'Submit →');
+  setTimeout(()=>{
+    const tasks=DB.tasks;
+    const idx=tasks.findIndex(t=>t.id===applyTaskId);
+    if(idx===-1){ showAlert('applyErr','Task not found.'); busy('applyBtn','aSpin','aTxt',false,'Submit Proposal →'); return; }
+    tasks[idx].proposals.push({freelancerId:currentUser.id,freelancerName:currentUser.name,message:msg,bid:Number(bid),status:'pending',createdAt:new Date().toISOString()});
+    DB.tasks=tasks;
+    showAlert('applyOk','✓ Proposal submitted! The client will review it.');
+    renderTasks();
+    setTimeout(()=>{ closeModal('applyModal'); toast('Proposal submitted! 🎉','ok'); },1000);
+    busy('applyBtn','aSpin','aTxt',false,'Submit Proposal →');
+  },600);
+}
+
+function viewTask(taskId){
+  const t=DB.tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  const isOwner=currentUser&&t.userId===currentUser.id;
+  document.getElementById('detailContent').innerHTML=`
+    <div class="modal-title">${esc(t.title)}</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px;margin-top:6px">
+      <span style="font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:1rem">$${t.budget}</span>
+      <span class="badge-sm">${esc(t.category)}</span>
+      <span class="badge-sm sp-open">open</span>
+      <span class="badge-sm">${ago(t.createdAt)}</span>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);line-height:1.65;margin-bottom:16px">${esc(t.description)}</p>
+    ${isOwner&&t.proposals?.length?`
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:4px">${t.proposals.length} Proposal${t.proposals.length>1?'s':''}</div>
+      <div class="prop-list">${t.proposals.map(p=>`
+        <div class="prop">
+          <div class="prop-top"><span class="prop-name">👤 ${esc(p.freelancerName)}</span><span class="prop-bid">$${p.bid}</span></div>
+          <div class="prop-msg">${esc(p.message)}</div>
+          ${t.status==='open'?`<button class="prop-accept" onclick="acceptProposal('${t.id}','${p.freelancerId}')">✓ Accept &amp; Hire</button>`:`<span class="badge-sm sp-${p.status}">${p.status}</span>`}
+        </div>`).join('')}
+      </div>` : (isOwner?`<p style="color:var(--muted);font-size:.84rem">No proposals yet. Share your task to attract freelancers!</p>`:`<button class="form-sub" onclick="closeModal('detailModal');openApply('${t.id}','${esc(t.title)}',${t.budget})">Apply for This Task →</button>`)}`;
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function acceptProposal(taskId, freelancerId){
+  const tasks=DB.tasks;
+  const idx=tasks.findIndex(t=>t.id===taskId);
+  if(idx===-1) return;
+  tasks[idx].status='in-progress';
+  tasks[idx].assignedTo=freelancerId;
+  tasks[idx].proposals.forEach(p=>p.status=p.freelancerId===freelancerId?'accepted':'rejected');
+  DB.tasks=tasks;
+  closeModal('detailModal');
+  renderTasks();
+  toast('Freelancer hired! Task is now in-progress. 🚀','ok');
+}
+
+function completeTask(taskId){
+  if(!confirm('Mark task as complete and release payment?')) return;
+  const tasks=DB.tasks;
+  const idx=tasks.findIndex(t=>t.id===taskId);
+  if(idx===-1) return;
+  const task=tasks[idx];
+  task.status='completed';
+  // Credit freelancer wallet
+  if(task.assignedTo){
+    const users=DB.users;
+    const fi=users.findIndex(u=>u.id===task.assignedTo);
+    if(fi!==-1){ users[fi].walletBalance=(users[fi].walletBalance||0)+task.budget; users[fi].totalEarned=(users[fi].totalEarned||0)+task.budget; DB.users=users; }
+  }
+  DB.tasks=tasks;
+  renderTasks();
+  toast('Task completed! Payment released. ✓','ok');
+  if(dashTab==='mytasks') renderDashPanel('mytasks');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════════════
+function openDash(tab='overview'){
+  if(!currentUser){ openModal('auth','login'); return; }
+  dashTab=tab;
+  document.getElementById('dash').classList.add('open');
+  document.body.style.overflow='hidden';
+  buildDashTabs();
+  renderDashPanel(tab);
+}
+function closeDash(){
+  document.getElementById('dash').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function buildDashTabs(){
+  const isFL=currentUser?.role==='freelancer';
+  const tabs=isFL
+    ?['overview','browse','applications','earnings','ai','settings']
+    :['overview','mytasks','payments','ai','settings'];
+  const labels={overview:'🏠 Overview',browse:'🔍 Browse',applications:'📋 Applied',earnings:'💰 Earnings',mytasks:'📝 My Tasks',payments:'💳 Payments',ai:'🤖 AI Help',settings:'⚙️ Settings'};
+  document.getElementById('dashTabs').innerHTML=tabs.map(t=>`
+    <button class="dtab ${dashTab===t?'active':''}" onclick="switchDash('${t}')">${labels[t]}</button>`).join('');
+}
+
+function switchDash(tab){
+  dashTab=tab;
+  buildDashTabs();
+  renderDashPanel(tab);
+}
+
+function renderDashPanel(tab){
+  const body=document.getElementById('dashBody');
+  const name=currentUser?.name?.split(' ')[0]||'there';
+  const isFL=currentUser?.role==='freelancer';
+
+  if(tab==='overview'){
+    const myTasks=DB.tasks.filter(t=>isFL?t.assignedTo===currentUser.id:t.userId===currentUser.id);
+    const apps=isFL?DB.tasks.filter(t=>t.proposals?.some(p=>p.freelancerId===currentUser.id)):[];
+    const stats=isFL
+      ?[apps.length,'Applications',(myTasks.filter(t=>t.status==='in-progress').length||0),'Active Jobs',(myTasks.filter(t=>t.status==='completed').length||0),'Completed','$'+(currentUser.walletBalance||0),'Wallet']
+      :[myTasks.length,'Tasks Posted',(myTasks.filter(t=>t.status==='open').length||0),'Open',(myTasks.filter(t=>t.status==='in-progress').length||0),'In Progress',(myTasks.filter(t=>t.status==='completed').length||0),'Completed'];
+    body.innerHTML=`
+      <div class="dash-h1">Hey, <span>${esc(name)}!</span></div>
+      <div class="dash-sub">${isFL?'Your freelance activity':'Your client dashboard'}</div>
+      <div class="stat-row">
+        ${[0,2,4,6].map(i=>`<div class="stat-c"><div class="stat-n">${stats[i]}</div><div class="stat-l">${stats[i+1]}</div></div>`).join('')}
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:12px">Recent</div>
+      ${taskListHTML(isFL?apps.slice(0,4):myTasks.slice(0,4))}`;
+  }
+
+  else if(tab==='mytasks'){
+    const mine=DB.tasks.filter(t=>t.userId===currentUser.id);
+    body.innerHTML=`
+      <div class="dash-h1">My <span>Tasks</span></div>
+      <div class="dash-sub">Tasks you've posted.</div>
+      <div style="margin-bottom:18px"><button class="btn btn-primary btn-sm" onclick="postTask()">+ Post New Task</button></div>
+      ${mine.length?`<div class="tl">${mine.map(t=>`
+        <div class="tli">
+          <div class="tli-info">
+            <div class="tli-title">${esc(t.title)}</div>
+            <div class="tli-meta"><span>$${t.budget}</span><span>${esc(t.category)}</span></div>
+          </div>
+          <div class="tli-actions">
+            <span class="sp-${t.status==='in-progress'?'ip':t.status==='completed'?'done':'open'}">${t.status}</span>
+            ${t.proposals?.length&&t.status==='open'?`<button class="tc-apply" onclick="viewTask('${t.id}')">Proposals (${t.proposals.length})</button>`:''}
+            ${t.status==='in-progress'?`<button class="tc-apply" onclick="completeTask('${t.id}')">✓ Complete</button>`:''}
+          </div>
+        </div>`).join('')}</div>`
+      :`<div class="empty"><div class="empty-i">📝</div><div class="empty-t">No tasks posted yet.</div><button class="btn btn-primary btn-sm" onclick="postTask()">Post Your First Task</button></div>`}`;
+  }
+
+  else if(tab==='browse'){
+    const open=DB.tasks.filter(t=>t.status==='open'&&t.userId!==currentUser.id);
+    body.innerHTML=`
+      <div class="dash-h1">Browse <span>Tasks</span></div>
+      <div class="dash-sub">Find your next gig and submit a proposal.</div>
+      ${open.length?`<div class="tl">${open.map(t=>`
+        <div class="tli">
+          <div class="tli-info">
+            <div class="tli-title">${esc(t.title)}</div>
+            <div class="tli-meta"><span>$${t.budget}</span><span>${esc(t.category)}</span><span>${ago(t.createdAt)}</span></div>
+          </div>
+          <div class="tli-actions">
+            <button class="tc-apply" onclick="viewTask('${t.id}')">View</button>
+            <button class="tc-apply" onclick="openApply('${t.id}','${esc(t.title)}',${t.budget})">Apply</button>
+          </div>
+        </div>`).join('')}</div>`
+      :`<div class="empty"><div class="empty-i">🔍</div><div class="empty-t">No open tasks right now.</div></div>`}`;
+  }
+
+  else if(tab==='applications'){
+    const apps=DB.tasks.filter(t=>t.proposals?.some(p=>p.freelancerId===currentUser.id));
+    body.innerHTML=`
+      <div class="dash-h1">My <span>Applications</span></div>
+      <div class="dash-sub">Track all your submitted proposals.</div>
+      ${apps.length?`<div class="tl">${apps.map(t=>{
+        const p=t.proposals.find(p=>p.freelancerId===currentUser.id);
+        return `<div class="tli">
+          <div class="tli-info">
+            <div class="tli-title">${esc(t.title)}</div>
+            <div class="tli-meta"><span>Budget: $${t.budget}</span>${p?`<span>Bid: $${p.bid}</span>`:''}</div>
+          </div>
+          <span class="sp-${p?.status==='accepted'?'done':p?.status==='rejected'?'open':'ip'}">${p?.status||'pending'}</span>
+        </div>`;}).join('')}</div>`
+      :`<div class="empty"><div class="empty-i">📋</div><div class="empty-t">No applications yet.</div><button class="btn btn-primary btn-sm" onclick="switchDash('browse')">Browse Tasks</button></div>`}`;
+  }
+
+  else if(tab==='earnings'){
+    const u=DB.users.find(u=>u.id===currentUser.id)||currentUser;
+    const completed=DB.tasks.filter(t=>t.assignedTo===currentUser.id&&t.status==='completed');
+    body.innerHTML=`
+      <div class="dash-h1">My <span>Earnings</span></div>
+      <div class="dash-sub">Your wallet and completed jobs.</div>
+      <div class="stat-row">
+        <div class="stat-c"><div class="stat-n">$${u.walletBalance||0}</div><div class="stat-l">Wallet Balance</div></div>
+        <div class="stat-c"><div class="stat-n">$${u.totalEarned||0}</div><div class="stat-l">Total Earned</div></div>
+        <div class="stat-c"><div class="stat-n">${completed.length}</div><div class="stat-l">Jobs Done</div></div>
+        <div class="stat-c"><div class="stat-n">${DB.tasks.filter(t=>t.assignedTo===currentUser.id&&t.status==='in-progress').length}</div><div class="stat-l">Active Jobs</div></div>
+      </div>
+      ${u.walletBalance>0?`
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:8px">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:14px">Withdraw Funds</div>
+          <div class="form-g"><label class="form-l">Amount ($)</label><input class="form-i" type="number" id="wAmt" placeholder="Enter amount" max="${u.walletBalance}" inputmode="numeric"/></div>
+          <button class="form-sub" onclick="doWithdraw()">Withdraw →</button>
+        </div>`:``}`;
+  }
+
+  else if(tab==='payments'){
+    const paid=DB.tasks.filter(t=>t.userId===currentUser.id&&['in-progress','completed'].includes(t.status));
+    body.innerHTML=`
+      <div class="dash-h1">Payment <span>History</span></div>
+      <div class="dash-sub">Your transaction records.</div>
+      ${paid.length?`<div class="tl">${paid.map(t=>`
+        <div class="tli">
+          <div class="tli-info">
+            <div class="tli-title">${esc(t.title)}</div>
+            <div class="tli-meta"><span>$${t.budget}</span><span>${t.category}</span></div>
+          </div>
+          <span class="sp-${t.status==='completed'?'done':'ip'}">${t.status==='completed'?'released':'escrowed'}</span>
+        </div>`).join('')}</div>`
+      :`<div class="empty"><div class="empty-i">💳</div><div class="empty-t">No payments yet.</div></div>`}`;
+  }
+
+  else if(tab==='ai'){
+    aiHistory=[];
+    body.innerHTML=`
+      <div class="dash-h1">🤖 AI <span>Support</span></div>
+      <div class="dash-sub">Ask me anything about TaskHive.</div>
+      <div class="ai-chat">
+        <div class="ai-chat-head">
+          <div class="ai-av">🤖</div>
+          <div><div class="ai-chat-title">TaskHive AI</div><div class="ai-chat-status">● Online · 24/7</div></div>
+        </div>
+        <div class="ai-msgs" id="aiMsgs">
+          <div class="bubble bubble-ai"><div class="ai-nm">🤖 TaskHive AI</div>Hi ${esc(name)}! I can help with tasks, payments, disputes, and anything about how TaskHive works. What do you need? 😊</div>
+        </div>
+        <div class="ai-input-row">
+          <input class="ai-input" id="aiIn" placeholder="Ask me anything…" onkeydown="if(event.key==='Enter')sendAI()"/>
+          <button class="ai-send" onclick="sendAI()">Send →</button>
+        </div>
+      </div>`;
+  }
+
+  else if(tab==='settings'){
+    body.innerHTML=`
+      <div class="dash-h1">Account <span>Settings</span></div>
+      <div class="dash-sub">Update your profile.</div>
+      <div class="form-g"><label class="form-l">Full Name</label><input class="form-i" id="sName" value="${esc(currentUser?.name||'')}"/></div>
+      <div class="form-g"><label class="form-l">Email</label><input class="form-i" type="email" id="sEmail" value="${esc(currentUser?.email||'')}" inputmode="email"/></div>
+      ${isFL?`<div class="form-g"><label class="form-l">Skills (comma-separated)</label><input class="form-i" id="sSkills" value="${esc((currentUser?.skills||[]).join(', '))}"/></div>
+      <div class="form-g"><label class="form-l">Hourly Rate ($)</label><input class="form-i" type="number" id="sRate" value="${currentUser?.hourlyRate||''}" inputmode="numeric"/></div>`:''}
+      <div class="alert alert-ok" id="setOk"></div>
+      <button class="form-sub" onclick="saveSettings()">Save Changes →</button>
+      <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
+        <button class="btn btn-ghost" style="width:100%;color:var(--err);border-color:var(--err)" onclick="logout()">Log Out</button>
+      </div>`;
+  }
+}
+
+function taskListHTML(tasks){
+  if(!tasks?.length) return `<div class="empty"><div class="empty-i">📭</div><div class="empty-t">Nothing here yet.</div></div>`;
+  return `<div class="tl">${tasks.map(t=>`
+    <div class="tli" onclick="closeModal('detailModal');viewTask('${t.id}');closeDash()" style="cursor:pointer">
+      <div class="tli-info">
+        <div class="tli-title">${esc(t.title)}</div>
+        <div class="tli-meta"><span>$${t.budget}</span><span>${esc(t.category)}</span><span>${ago(t.createdAt)}</span></div>
+      </div>
+      <span class="sp-${t.status==='in-progress'?'ip':t.status==='completed'?'done':'open'}">${t.status}</span>
+    </div>`).join('')}</div>`;
+}
+
+function doWithdraw(){
+  const amt=Number(document.getElementById('wAmt')?.value);
+  if(!amt||amt<=0){ toast('Please enter a valid amount','err'); return; }
+  const u=DB.users.find(u=>u.id===currentUser.id);
+  if(!u||u.walletBalance<amt){ toast('Insufficient balance','err'); return; }
+  u.walletBalance-=amt;
+  const users=DB.users; const idx=users.findIndex(x=>x.id===u.id); users[idx]=u; DB.users=users;
+  currentUser=u; DB.session=u;
+  toast('$'+amt+' withdrawal initiated! Arrives in 1-2 business days.','ok');
+  renderDashPanel('earnings');
+}
+
+function saveSettings(){
+  const name=document.getElementById('sName')?.value.trim();
+  const email=document.getElementById('sEmail')?.value.trim();
+  if(!name||!email){ toast('Name and email required','err'); return; }
+  const skills=document.getElementById('sSkills')?.value?.split(',').map(s=>s.trim()).filter(Boolean)||currentUser.skills||[];
+  const hourlyRate=Number(document.getElementById('sRate')?.value)||currentUser.hourlyRate||0;
+  const users=DB.users; const idx=users.findIndex(u=>u.id===currentUser.id);
+  if(idx!==-1){ users[idx]={...users[idx],name,email,skills,hourlyRate}; DB.users=users; }
+  currentUser={...currentUser,name,email,skills,hourlyRate}; DB.session=currentUser;
+  updateNav();
+  const el=document.getElementById('setOk'); if(el){el.textContent='✓ Saved!';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
+  toast('Profile saved ✓','ok');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AI CHAT (smart fallback — no API key needed)
+// ══════════════════════════════════════════════════════════════
+function sendAI(){
+  const input=document.getElementById('aiIn');
+  const msgs=document.getElementById('aiMsgs');
+  if(!input||!msgs) return;
+  const msg=input.value.trim();
+  if(!msg) return;
+  input.value='';
+  msgs.innerHTML+=`<div class="bubble bubble-u">${esc(msg)}</div>`;
+  msgs.innerHTML+=`<div id="aiThink" class="ai-think"><div class="ai-d"></div><div class="ai-d"></div><div class="ai-d"></div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+
+  setTimeout(()=>{
+    document.getElementById('aiThink')?.remove();
+    const reply=aiReply(msg);
+    msgs.innerHTML+=`<div class="bubble bubble-ai"><div class="ai-nm">🤖 TaskHive AI</div>${esc(reply)}</div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  }, 600+Math.random()*400);
+}
+
+function aiReply(msg){
+  const m=msg.toLowerCase();
+  if(/^(hi|hello|hey|hiya|yo)\b/.test(m)) return "Hey! 👋 I'm TaskHive's AI assistant. I can help with tasks, payments, account issues, disputes, and more. What do you need?";
+  if(m.includes('post')&&(m.includes('task')||m.includes('job'))) return "To post a task:\n1. Tap + Post Task in the nav\n2. Write a clear title and description\n3. Set your budget\n4. Choose a category\n5. Tap Post Task!\n\nFreelancers will start applying within minutes. 🚀";
+  if(m.includes('apply')||m.includes('proposal')) return "To apply for tasks:\n1. Browse Live Tasks on the homepage\n2. Tap Apply → on any task\n3. Write a strong cover message\n4. Set your bid price\n5. Submit!\n\nTip: personalized proposals win more jobs! 💡";
+  if(m.includes('escrow')||(m.includes('pay')&&!m.includes('paypal'))) return "TaskHive uses escrow to protect both sides:\n\n🔒 Client pays into escrow first\n🔒 Funds are held securely\n✅ Released to freelancer only when client approves\n\nNo payment is released without your approval.";
+  if(m.includes('razorpay')||m.includes('upi')||m.includes('india')) return "Razorpay is our India payment gateway:\n• Accepts UPI, cards, netbanking, wallets\n• Currency: INR\n• Fee: ~2%\n\nPay for a task: open the task → tap Pay to Escrow → complete Razorpay checkout.";
+  if(m.includes('paypal')||m.includes('usd')) return "PayPal is our global payment option:\n• Accepts PayPal balance, cards, bank\n• Currency: USD\n• Available worldwide\n\nPay via PayPal: open task → tap Pay via PayPal → authorize on PayPal.";
+  if(m.includes('withdraw')||m.includes('wallet')||m.includes('earn')) return "To withdraw earnings:\n1. Go to Dashboard → Earnings\n2. Enter amount\n3. Tap Withdraw\n\nFunds are added to your wallet when a client marks a task complete. Withdrawals take 1-2 business days. 💰";
+  if(m.includes('dispute')||m.includes('scam')||m.includes('fraud')||m.includes('cheat')) return "For disputes:\n1. Go to the task in your Dashboard\n2. Tap Raise Dispute\n3. Explain the issue clearly\n\nFunds stay in escrow during review. We resolve disputes within 48 hours based on evidence. 🛡️";
+  if(m.includes('cancel')) return "Tasks can be cancelled from Dashboard → My Tasks while they're still Open (no freelancer assigned). If work is already In Progress, please raise a dispute instead.";
+  if(m.includes('fee')||m.includes('cost')||m.includes('charge')) return "TaskHive pricing:\n• Posting tasks: FREE\n• Creating account: FREE\n• Payment fee: ~2% (Razorpay) or ~2.9%+$0.30 (PayPal)\n• Platform fee: FREE during beta!\n\nWe only make money when you make money. 🤝";
+  if(m.includes('profile')||m.includes('settings')) return "Update your profile in Dashboard → Settings. Add your name, skills, hourly rate, and bio. A complete profile gets 3x more hires!";
+  if(m.includes('password')||m.includes('forgot')) return "Password reset is coming soon! Contact our support team via the Help link in the footer and we'll reset it within 24 hours.";
+  if(m.includes('thank')||m.includes('great')||m.includes('perfect')) return "You're welcome! 😊 Happy to help. Anything else you need?";
+  if(m.includes('how')&&(m.includes('work')||m.includes('start'))) return "TaskHive works like this:\n\nAs a Client:\n1. Post a task with budget\n2. Review proposals\n3. Hire the best freelancer\n4. Pay when satisfied\n\nAs a Freelancer:\n1. Browse open tasks\n2. Submit proposals\n3. Complete the work\n4. Get paid!\n\nNeed help with anything specific?";
+  return "I'm here to help! I can answer questions about:\n• Posting or finding tasks\n• Payments and escrow\n• Account and profile\n• Disputes and refunds\n• How TaskHive works\n\nCould you be more specific about what you need?";
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SCROLL REVEAL
+// ══════════════════════════════════════════════════════════════
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+updateNav();
+renderTasks();
+</script>
+</body>
+</html>
